@@ -37,6 +37,21 @@ class VoteController extends Controller
         $this->twilio = new Client($this->sid, $this->token);
         $this->fromPhone = env('TWILIO_FROM_PHONE');
     }
+    /**
+     * 获取投票信息
+     * @param Request $request
+     * @return json
+     */
+    public function getVote() {
+        $vote = Vote::find($this->id)->toArray();
+        if(!$vote) {
+            return response()->json([
+                'code' => 400,
+                'message' => 'This voting does not exist.'
+            ]);
+        }
+        return response()->json(['code' => 200, 'data' => $vote]);
+    }
 
     /**
      * 候选人列表
@@ -166,17 +181,8 @@ class VoteController extends Controller
             return 'wrong number: '.$phone;
         }
     }
-
-    public function getVote() {
-        $vote = Vote::find($this->id)->toArray();
-        if(!$vote) {
-            return response()->json([
-                'code' => 400,
-                'message' => 'This voting does not exist.'
-            ]);
-        }
-        return response()->json(['code' => 200, 'data' => $vote]);
-    }
 */
+
+
 
 }
