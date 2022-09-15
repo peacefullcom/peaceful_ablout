@@ -130,7 +130,7 @@ class VoteController extends Controller
         $verifyCode = random_int(100000,999999);
         $expireTime = date('Y-m-d H:i:s', time() + 60 * 5);//5分钟
         $newCodeData = ['phone'=>$phone, 'code' => $verifyCode, 'expired_at'=>$expireTime];
-        VoteVerifyCode::where('phone','=',$phone)->where('created_at','<',time() - 60 * 60 * 24)->delete();
+        VoteVerifyCode::where('phone','=',$phone)->where('created_at','<', strtotime(time() - 60 * 60 * 24))->delete();
         try {
             $message = $this->twilio->messages->create("+1".$phone, // to
                            ["body" => "Your verify code is ". $verifyCode, "from" => $this->fromPhone]
