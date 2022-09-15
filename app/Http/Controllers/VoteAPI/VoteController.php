@@ -13,7 +13,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Vote;
 use App\Models\VotePlayer;
-
+use App\Models\VoteVerifyCode;
 use Twilio\Rest\Client;
 
 class VoteController extends Controller
@@ -126,22 +126,22 @@ class VoteController extends Controller
      * @throws \Twilio\Exceptions\TwilioException
      */
     public function phoneVerification(Request $request) {
-        // phone format verification
-        // $req->validate([
-        //     'phone' => 'required|regex:/^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/u',
-        // ]);
+        $phone = $request->get('phone');
+        $verifyCode = random_int(100000,999999);
+        $expireTime = date('Y-m-d H:i:s', time() + 60 * 5);//5分钟
+        $newCodeData = ['phone'=>$phone, 'code' => $verifyCode, 'expired_at'=>$expireTime];
+        VoteVerifyCode::where('phone','=',$phone)->where('created_at','<',time() - 60 * 60 * 24)->delete();
         try {
-            $verification = $this->twilio->verify->v2->services($this->service_sid)
-                ->verifications
-                ->create("+1".$request->get('phone'), "sms");
+            $message = $this->twilio->messages->create("+1".$phone, // to
+                           ["body" => "Your verify code is ". $verifyCode, "from" => $this->fromPhone]
+                  );
         } catch (\Exception $exception) {
             return \Response::json([
                 "code" => 444,
                 "message" => "Invalid phone number"], 403);
         }
-        return \Response::json(["code" => 100, 
-            'message' =>  "verification code sent to phone " . $verification->to . "; please verify in one minute.",
-        ], 200);
+        VoteVerifyCode::create($newCodeData);
+        return response()->json(['code' => 200, 'status'=>'success']);
     }
 
     /**
@@ -152,16 +152,29 @@ class VoteController extends Controller
      * @throws \Twilio\Exceptions\TwilioException
      */
     public function phoneVerificationCheck(Request $request) {
-        try {                                   
-            $verification_check = $this->twilio->verify->v2->services($this->service_sid)
-                ->verificationChecks
-                ->create($request->get('code'), // code
-                    ["to" => "+1" . $request->get('phone')]
-                );
-        } catch (\Exception $e) {
-            return false;
+        $phone = $request->get('phone');
+        $code = $request->get('code');
+        $verifyCode = VoteVerifyCode::where('status','=',0)->where('phone','=',$phone)->orderBy('id','DESC')->first();
+        if($verifyCode) {
+          $expireTime = strtotime($verifyCode->expired_at);
+          if(time() < $expireTime && $code == $verifyCode->code) {
+            $verifyCode->verified_at = date('Y-m-d H:i:s', time());
+            $verifyCode->status = 1;
+            $verifyCode->save();
+            return response(['code' => 200,'status'=>'success','message'=>'Verify Success']);
+          }
+          elseif (time() > $expireTime) {
+            $verifyCode->status = 2;
+            $verifyCode->save();
+            return response(['code' => 408,'status'=>'error','message'=>'Your code expired']);
+          }
+          else{
+            return response(['code' => 403,'status'=>'error','message'=>'Your code input does not match, please type again']);
+          }
         }
-        return  true;
+        else{
+          return response(['code' => 404, 'status'=>'error', 'message'=>'No data found, please send again']);
+        }
     }
 /*
     public function sendSms(Request $req) {
