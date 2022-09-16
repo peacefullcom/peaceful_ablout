@@ -128,8 +128,7 @@ class VoteController extends Controller
                 $groups[$votePlayer['group_id']][] = $votePlayer;
             }
         }
-        print_r($groups);
-        //return response()->json(['code' => 200, 'data' => $votePlayers]);
+        return response()->json(['code' => 200, 'data' => $votePlayers]);
     }
 
     /**
