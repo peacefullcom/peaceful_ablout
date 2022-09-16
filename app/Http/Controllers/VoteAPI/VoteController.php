@@ -114,7 +114,7 @@ class VoteController extends Controller
         }
         $votePlayerModel = new VotePlayer();
         $query = $votePlayerModel->query();
-        $query->select('id', 'name', 'group_id', 'vote_count');
+        $query->select('id', 'name', 'group_id', 'vote_count','img','code');
         $query->where('vote_id', '=', $this->id);
         $query->where('is_active', '=', 1);
         $query->where('is_delete', '=', 0);
