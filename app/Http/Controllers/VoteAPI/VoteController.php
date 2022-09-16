@@ -144,7 +144,10 @@ class VoteController extends Controller
         if ($count > 10) {
             return response(['code' => 401,'status'=>'error','message'=>'Sending a short message exceeds the limit']);
         }
-        
+        $isVote = VoteVerifyCode::where('phone','=',$phone)->where('status','=',1)->where('created_at','>', strtotime("-1 day"))->count();
+        if ($count > 0) {
+            return response(['code' => 402,'status'=>'error','message'=>'You voted today']);
+        }
         $verifyCode = random_int(100000,999999);
         $expireTime = date('Y-m-d H:i:s', time() + 60 * 5);//5分钟
         $newCodeData = ['phone'=>$phone, 'code' => $verifyCode, 'expired_at'=>$expireTime];
