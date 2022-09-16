@@ -9,6 +9,8 @@
 namespace App\Http\Controllers\VoteAPI;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 use App\Http\Controllers\Controller;
 
 use App\Models\Vote;
@@ -170,6 +172,7 @@ class VoteController extends Controller
     public function phoneVerificationCheck(Request $request) {
         $phone = $request->get('phone');
         $code = $request->get('code');
+        $playerId = $request->get('player_id');
         $verifyCode = VoteVerifyCode::where('status','=',0)->where('phone','=',$phone)->orderBy('id','DESC')->first();
         if($verifyCode) {
           $expireTime = strtotime($verifyCode->expired_at);
@@ -177,9 +180,25 @@ class VoteController extends Controller
             
             $verifyCode->verified_at = date('Y-m-d H:i:s', time());
             $verifyCode->status = 1;
-            $verifyCode->save();
 
-            return response(['code' => 200,'status'=>'success','message'=>'Verify Success']);
+            $voteModel = Vote::find($this->id);
+            $voteModel->vote_count += 1;
+            $votePlayerModel = VotePlayer::find($playerId);
+            if (!$votePlayerModel) {
+                return response(['code' => 404, 'status'=>'error', 'message'=>'No player data found, please check']);
+            }
+            $votePlayerModel->vote_count += 1;
+            DB::beginTransaction();
+            try{ 
+                $verifyCode->save();
+                $voteModel->save();
+                $votePlayerModel->save();
+                DB::commit(); 
+                return response(['code' => 200,'status'=>'success','message'=>'Verify Success']);
+            }catch (\Exception $e) {  
+                DB::rollBack();
+                return response(['code' => 500,'status'=>'error','message'=>'Failed vote']);
+            }  
           }
           elseif (time() > $expireTime) {
             $verifyCode->status = 2;
