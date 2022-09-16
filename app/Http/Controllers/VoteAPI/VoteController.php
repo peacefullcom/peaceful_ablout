@@ -122,7 +122,7 @@ class VoteController extends Controller
         $groups = [];
         foreach($votePlayers as $votePlayer) {
             if(!isset($groups[0]) || count($groups[0]) < 10) {
-                $groups[0][] = $votePlayer;
+                $groups['all'][] = $votePlayer;
             }
             if($votePlayer['group_id'] && (!isset($groups[$votePlayer['group_id']]) || count($groups[$votePlayer['group_id']]) < 10)) {
                 $groups[$votePlayer['group_id']][] = $votePlayer;
