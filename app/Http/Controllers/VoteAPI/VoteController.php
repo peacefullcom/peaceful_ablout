@@ -114,10 +114,22 @@ class VoteController extends Controller
         }
         $votePlayerModel = new VotePlayer();
         $query = $votePlayerModel->query();
+        $query->select('id', 'name', 'group_id', 'vote_count');
         $query->where('vote_id', '=', $this->id);
+        $query->where('is_active', '=', 1);
         $query->where('is_delete', '=', 0);
-        $votePlayers = $query->orderBy('vote_count', 'desc')->limit(10)->get()->toArray();
-        return response()->json(['code' => 200, 'data' => $votePlayers]);
+        $votePlayers = $query->orderBy('vote_count', 'desc')->get()->toArray();
+        $groups = [];
+        foreach($votePlayers as $votePlayer) {
+            if(!isset($groups[0]) || count($groups[0]) < 10) {
+                $groups[0][] = $votePlayer;
+            }
+            if($votePlayer['group_id'] && (!isset($groups[$votePlayer['group_id']]) || count($groups[$votePlayer['group_id']]) < 10)) {
+                $groups[$votePlayer['group_id']][] = $votePlayer;
+            }
+        }
+        print_r($groups);
+        //return response()->json(['code' => 200, 'data' => $votePlayers]);
     }
 
     /**
@@ -127,6 +139,11 @@ class VoteController extends Controller
      */
     public function phoneVerification(Request $request) {
         $phone = $request->get('phone');
+        $count = VoteVerifyCode::where('phone','=',$phone)->where('created_at','>', strtotime(time() - 60 * 60 * 24))->count();
+        if ($count > 10) {
+            return response(['code' => 401,'status'=>'error','message'=>'Sending a short message exceeds the limit']);
+        }
+        
         $verifyCode = random_int(100000,999999);
         $expireTime = date('Y-m-d H:i:s', time() + 60 * 5);//5分钟
         $newCodeData = ['phone'=>$phone, 'code' => $verifyCode, 'expired_at'=>$expireTime];
