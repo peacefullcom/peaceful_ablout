@@ -128,7 +128,7 @@ class VoteController extends Controller
                 $groups[$votePlayer['group_id']][] = $votePlayer;
             }
         }
-        return response()->json(['code' => 200, 'data' => $votePlayers]);
+        return response()->json(['code' => 200, 'data' => $groups]);
     }
 
     /**
@@ -174,9 +174,11 @@ class VoteController extends Controller
         if($verifyCode) {
           $expireTime = strtotime($verifyCode->expired_at);
           if(time() < $expireTime && $code == $verifyCode->code) {
+            
             $verifyCode->verified_at = date('Y-m-d H:i:s', time());
             $verifyCode->status = 1;
             $verifyCode->save();
+
             return response(['code' => 200,'status'=>'success','message'=>'Verify Success']);
           }
           elseif (time() > $expireTime) {
