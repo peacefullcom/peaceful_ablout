@@ -145,7 +145,7 @@ class VoteController extends Controller
             return response(['code' => 401,'status'=>'error','message'=>'Sending a short message exceeds the limit']);
         }
         $isVote = VoteVerifyCode::where('phone','=',$phone)->where('status','=',1)->where('created_at','>', strtotime("-1 day"))->count();
-        if ($count > 0) {
+        if ($isVote > 0) {
             return response(['code' => 402,'status'=>'error','message'=>'You voted today']);
         }
         $verifyCode = random_int(100000,999999);
@@ -176,6 +176,10 @@ class VoteController extends Controller
         $phone = $request->get('phone');
         $code = $request->get('code');
         $playerId = $request->get('player_id');
+        $isVote = VoteVerifyCode::where('phone','=',$phone)->where('status','=',1)->where('created_at','>', strtotime("-1 day"))->count();
+        if ($isVote > 0) {
+            return response(['code' => 402,'status'=>'error','message'=>'You voted today']);
+        }
         $verifyCode = VoteVerifyCode::where('status','=',0)->where('phone','=',$phone)->orderBy('id','DESC')->first();
         if($verifyCode) {
           $expireTime = strtotime($verifyCode->expired_at);
@@ -188,7 +192,7 @@ class VoteController extends Controller
             $voteModel->vote_count += 1;
             $votePlayerModel = VotePlayer::find($playerId);
             if (!$votePlayerModel) {
-                return response(['code' => 404, 'status'=>'error', 'message'=>'No player data found, please check']);
+                return response(['code' => 401, 'status'=>'error', 'message'=>'No player data found, please check']);
             }
             $votePlayerModel->vote_count += 1;
             DB::beginTransaction();
