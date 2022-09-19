@@ -158,7 +158,7 @@ class VoteController extends Controller
         $newCodeData = ['phone'=>$phone, 'code' => $verifyCode, 'expired_at'=>$expireTime];
         VoteVerifyCode::where('phone','=',$phone)->where('created_at','<', strtotime(time() - 60 * 60 * 24))->delete();
         try {
-            //$message = $this->twilio->messages->create("+1".$phone, ["body" => "Your verify code is ". $verifyCode, "from" => $this->fromPhone]);
+            $message = $this->twilio->messages->create("+1".$phone, ["body" => "Your verify code is ". $verifyCode, "from" => $this->fromPhone]);
         } catch (\Exception $exception) {
             return \Response::json([
                 "code" => 444,
