@@ -10,6 +10,7 @@ namespace App\Http\Controllers\VoteAPI;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 
 use App\Http\Controllers\Controller;
 
@@ -45,13 +46,16 @@ class VoteController extends Controller
      * @return json
      */
     public function getVote() {
-        $vote = Vote::find($this->id)->toArray();
+        $vote = Vote::find($this->id);
         if(!$vote) {
             return response()->json([
                 'code' => 400,
                 'message' => 'This voting does not exist.'
             ]);
         }
+        $vote->increment('view_count');
+        $vote->save();
+        $vote->toArray();
         return response()->json(['code' => 200, 'data' => $vote]);
     }
 
@@ -139,12 +143,13 @@ class VoteController extends Controller
      * @throws \Twilio\Exceptions\TwilioException
      */
     public function phoneVerification(Request $request) {
+        if (!$this->limitAccess()) return response(['code' => 400, 'status'=>'error', 'message'=>'Requests are too frequent']);
         $phone = $request->get('phone');
-        $count = VoteVerifyCode::where('phone','=',$phone)->where('created_at','>', strtotime(time() - 60 * 60 * 24))->count();
+        $count = VoteVerifyCode::where('phone','=',$phone)->where('created_at','>', date('Y-m-d H:i:s',strtotime("-1 day")))->count();
         if ($count > 10) {
             return response(['code' => 401,'status'=>'error','message'=>'Sending a short message exceeds the limit']);
         }
-        $isVote = VoteVerifyCode::where('phone','=',$phone)->where('status','=',1)->where('created_at','>', strtotime("-1 day"))->count();
+        $isVote = VoteVerifyCode::where('phone','=',$phone)->where('status','=',1)->where('created_at','>', date('Y-m-d H:i:s',strtotime("-1 day")))->count();
         if ($isVote > 0) {
             return response(['code' => 402,'status'=>'error','message'=>'You voted today']);
         }
@@ -153,9 +158,7 @@ class VoteController extends Controller
         $newCodeData = ['phone'=>$phone, 'code' => $verifyCode, 'expired_at'=>$expireTime];
         VoteVerifyCode::where('phone','=',$phone)->where('created_at','<', strtotime(time() - 60 * 60 * 24))->delete();
         try {
-            $message = $this->twilio->messages->create("+1".$phone, // to
-                           ["body" => "Your verify code is ". $verifyCode, "from" => $this->fromPhone]
-                  );
+            //$message = $this->twilio->messages->create("+1".$phone, ["body" => "Your verify code is ". $verifyCode, "from" => $this->fromPhone]);
         } catch (\Exception $exception) {
             return \Response::json([
                 "code" => 444,
@@ -176,7 +179,7 @@ class VoteController extends Controller
         $phone = $request->get('phone');
         $code = $request->get('code');
         $playerId = $request->get('player_id');
-        $isVote = VoteVerifyCode::where('phone','=',$phone)->where('status','=',1)->where('created_at','>', strtotime("-1 day"))->count();
+        $isVote = VoteVerifyCode::where('phone','=',$phone)->where('status','=',1)->where('created_at','>', date('Y-m-d H:i:s',strtotime("-1 day")))->count();
         if ($isVote > 0) {
             return response(['code' => 402,'status'=>'error','message'=>'You voted today']);
         }
@@ -220,6 +223,25 @@ class VoteController extends Controller
           return response(['code' => 404, 'status'=>'error', 'message'=>'No data found, please send again']);
         }
     }
+
+    private function limitAccess() {
+        $key = 'USER_LIMIT_'.md5($_SERVER['HTTP_USER_AGENT'].$_SERVER['REMOTE_ADDR']);
+        $limit = 3;
+        $check = Redis::get($key);
+        if ($check) {
+            if ($check > $limit) {
+                return false;
+            } else {
+                Redis::incr($key);
+            }
+        } else {
+            Redis::setex($key, 60, 1);
+        }
+        return true;
+    }
+    
+
+
 /*
     public function sendSms(Request $req) {
         ini_set('max_execution_time', '0');
