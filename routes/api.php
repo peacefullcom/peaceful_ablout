@@ -18,6 +18,8 @@ Route::group([
     //Route::get('sendSms', 'App\Http\Controllers\VoteAPI\VoteController@sendSms');
     Route::post('phoneVerification', 'App\Http\Controllers\VoteAPI\VoteController@phoneVerification');
     Route::post('phoneVerificationCheck', 'App\Http\Controllers\VoteAPI\VoteController@phoneVerificationCheck');
+    Route::get('limitAccessTest', 'App\Http\Controllers\VoteAPI\VoteController@limitAccessTest');
+    
     
 
     

@@ -145,11 +145,11 @@ class VoteController extends Controller
     public function phoneVerification(Request $request) {
         if (!$this->limitAccess()) return response(['code' => 400, 'status'=>'error', 'message'=>'Requests are too frequent']);
         $phone = $request->get('phone');
-        $count = VoteVerifyCode::where('phone','=',$phone)->where('created_at','>', date('Y-m-d H:i:s',strtotime("-1 day")))->count();
+        $count = VoteVerifyCode::where('phone','=',$phone)->where('created_at','>', date('Y-m-d 00:00:00',time()))->count();
         if ($count > 10) {
             return response(['code' => 401,'status'=>'error','message'=>'Sending a short message exceeds the limit']);
         }
-        $isVote = VoteVerifyCode::where('phone','=',$phone)->where('status','=',1)->where('created_at','>', date('Y-m-d H:i:s',strtotime("-1 day")))->count();
+        $isVote = VoteVerifyCode::where('phone','=',$phone)->where('status','=',1)->where('created_at','>', date('Y-m-d 00:00:00',time()))->count();
         if ($isVote > 0) {
             return response(['code' => 402,'status'=>'error','message'=>'You voted today']);
         }
@@ -179,7 +179,7 @@ class VoteController extends Controller
         $phone = $request->get('phone');
         $code = $request->get('code');
         $playerId = $request->get('player_id');
-        $isVote = VoteVerifyCode::where('phone','=',$phone)->where('status','=',1)->where('created_at','>', date('Y-m-d H:i:s',strtotime("-1 day")))->count();
+        $isVote = VoteVerifyCode::where('phone','=',$phone)->where('status','=',1)->where('created_at','>', date('Y-m-d 00:00:00', time()))->count();
         if ($isVote > 0) {
             return response(['code' => 402,'status'=>'error','message'=>'You voted today']);
         }
@@ -239,9 +239,13 @@ class VoteController extends Controller
         }
         return true;
     }
+
+    public function limitAccessTest() {
+        
+
+
+    }
     
-
-
 /*
     public function sendSms(Request $req) {
         ini_set('max_execution_time', '0');
