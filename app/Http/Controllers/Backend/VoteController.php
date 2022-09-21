@@ -100,7 +100,7 @@ class VoteController extends Controller
             }
             $vote->title = $request->get('title');
             $vote->content = $request->get('content');
-            $vote->day_votes = $request->get('day_votes'),
+            $vote->day_votes = $request->get('day_votes');
             $vote->rule = $request->get('rule');
             $vote->group = $request->get('group');
             $vote->start_at = isset($date_range[0]) ? $date_range[0] : '';
