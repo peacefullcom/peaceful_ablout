@@ -129,7 +129,7 @@ class VoteController extends Controller
      * @return json
      */
     public function getRank() {
-        $vote = Vote::find($this->id)->toArray();
+        $vote = Vote::find($this->id);
         if(!$vote) {
             return response()->json([
                 'code' => 400,
@@ -167,7 +167,7 @@ class VoteController extends Controller
         if ($count > 10) {
             return response(['code' => 401,'status'=>'error','message'=>'Sending a short message exceeds the limit']);
         }
-        $vote = Vote::find($this->id)->toArray();
+        $vote = Vote::find($this->id);
         if(!$vote) {
             return response()->json([
                 'code' => 400,
