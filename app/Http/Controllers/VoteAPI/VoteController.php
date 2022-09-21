@@ -129,7 +129,7 @@ class VoteController extends Controller
      * @return json
      */
     public function getRank() {
-        $vote = Vote::find($this->id);
+        $vote = Vote::find($this->id)->toArray();
         if(!$vote) {
             return response()->json([
                 'code' => 400,
@@ -204,6 +204,7 @@ class VoteController extends Controller
         $phone = $request->get('phone');
         $code = $request->get('code');
         $playerId = $request->get('player_id');
+        $vote = Vote::find($this->id);
         if(!$vote) {
             return response()->json([
                 'code' => 400,
