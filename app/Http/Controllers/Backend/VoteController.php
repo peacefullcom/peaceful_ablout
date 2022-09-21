@@ -50,7 +50,7 @@ class VoteController extends Controller
         if($request->has('submit')) {
             $validator = $request->validate( [
                 'title' => 'required|string|max:25',
-                'sort' => 'required|integer|max:99',
+                'day_votes' => 'required|integer|max:99',
             ]);
             if(!$validator) {
                 return Redirect::back()->withErrors();
@@ -90,6 +90,7 @@ class VoteController extends Controller
         if($request->has('submit')) {
             $validator = $request->validate( [
                 'title' => 'required|string|max:25',
+                'day_votes' => 'required|integer|max:99',
             ]);
             if(!$validator) {
                 return Redirect::back()->withErrors();
@@ -99,6 +100,7 @@ class VoteController extends Controller
             }
             $vote->title = $request->get('title');
             $vote->content = $request->get('content');
+            $vote->day_votes = $request->get('day_votes'),
             $vote->rule = $request->get('rule');
             $vote->group = $request->get('group');
             $vote->start_at = isset($date_range[0]) ? $date_range[0] : '';
