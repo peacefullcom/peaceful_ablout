@@ -57,7 +57,6 @@ class VoteController extends Controller
         $vote->save();
         $vote->toArray();
         $vote['end_at'] = $this->conversionRemainDate($vote['end_at']);
-        echo $vote['end_at'];
         return response()->json(['code' => 200, 'data' => $vote]);
     }
 
