@@ -24,6 +24,9 @@
                           Start_at - End_at
                       </th>
                       <th>
+                          day_votes
+                      </th>
+                      <th>
                           vote_count
                       </th>
                       <th>
@@ -47,6 +50,9 @@
                       </td>
                       <td>
                           {{ $vote->start_at }} - {{ $vote->end_at }}
+                      </td>
+                      <td>
+                          {{ $vote->day_votes }}
                       </td>
                       <td>
                           {{ $vote->vote_count }}

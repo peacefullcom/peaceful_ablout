@@ -56,7 +56,26 @@ class VoteController extends Controller
         $vote->increment('view_count');
         $vote->save();
         $vote->toArray();
+        $vote['end_at'] = $this->conversionRemainDate($vote['end_at']);
+        echo $vote['end_at'];
         return response()->json(['code' => 200, 'data' => $vote]);
+    }
+
+    private function conversionRemainDate($endtime) {
+        $now        = strtotime("now");
+        $endtime    = strtotime($endtime);
+        $secondInt     = $endtime-$now;
+        //$year       = floor($secondInt/3600/24/365);
+        //$temp       = $secondInt-$year*365*24*3600;
+        //$month      = floor($temp/3600/24/30);
+        //$temp       = $temp-$month*30*3600*24;
+        $day        = floor($secondInt/24/3600);
+        $temp       = $secondInt-$day*3600*24;
+        $hour       = floor($temp/3600);
+        //$temp       = $temp- $hour*3600;
+        //$minute     = floor($temp/60);
+        //$second    = $temp-$minute*60;
+        return $day.'天'.$hour.'小时';
     }
 
     /**
@@ -76,7 +95,7 @@ class VoteController extends Controller
         $query = $votePlayerModel->query();
         $query->where('vote_id', '=', $this->id);
         $query->where('is_delete', '=', 0);
-        $votePlayers = $query->orderBy('id', 'asc')->get()->toArray();
+        $votePlayers = $query->orderBy('vote_count', 'DESC')->get()->toArray();
         return response()->json(['code' => 200, 'data' => $votePlayers]);
     }
 
@@ -149,8 +168,15 @@ class VoteController extends Controller
         if ($count > 10) {
             return response(['code' => 401,'status'=>'error','message'=>'Sending a short message exceeds the limit']);
         }
+        $vote = Vote::find($this->id)->toArray();
+        if(!$vote) {
+            return response()->json([
+                'code' => 400,
+                'message' => 'This voting does not exist.'
+            ]);
+        }
         $isVote = VoteVerifyCode::where('phone','=',$phone)->where('status','=',1)->where('created_at','>', date('Y-m-d 00:00:00',time()))->count();
-        if ($isVote > 0) {
+        if ($isVote > $vote->day_votes) {
             return response(['code' => 402,'status'=>'error','message'=>'You voted today']);
         }
         $verifyCode = random_int(100000,999999);
@@ -179,8 +205,14 @@ class VoteController extends Controller
         $phone = $request->get('phone');
         $code = $request->get('code');
         $playerId = $request->get('player_id');
+        if(!$vote) {
+            return response()->json([
+                'code' => 400,
+                'message' => 'This voting does not exist.'
+            ]);
+        }
         $isVote = VoteVerifyCode::where('phone','=',$phone)->where('status','=',1)->where('created_at','>', date('Y-m-d 00:00:00', time()))->count();
-        if ($isVote > 0) {
+        if ($isVote > $vote->day_votes) {
             return response(['code' => 402,'status'=>'error','message'=>'You voted today']);
         }
         $verifyCode = VoteVerifyCode::where('status','=',0)->where('phone','=',$phone)->orderBy('id','DESC')->first();
@@ -241,10 +273,10 @@ class VoteController extends Controller
     }
 
     public function limitAccessTest() {
-        
-
 
     }
+
+
     
 /*
     public function sendSms(Request $req) {

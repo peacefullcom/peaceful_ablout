@@ -24,6 +24,7 @@ class Vote extends Model
         'title',
         'content',
         'rule',
+        'day_votes',
         'vote_count',
         'view_count',
         'player_count',

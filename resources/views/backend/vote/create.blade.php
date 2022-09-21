@@ -33,6 +33,10 @@
               <input class="col-sm-9 col-xs-12 form-control" id="title" name="title" type="text">
             </div>
             <div class="form-group row">
+              <label for="day_votes" class="col-sm-3 col-xs-12 required">day_votes</label>
+              <input class="col-sm-9 col-xs-12 form-control" id="day_votes" name="day_votes" type="text">
+            </div>
+            <div class="form-group row">
               <label for="content" class="col-sm-3 col-xs-12 required">content</label>
               <textarea class="col-sm-9 col-xs-12 form-control" id="content" name="content" rows="4" cols="50"></textarea>
             </div>
