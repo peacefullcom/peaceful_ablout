@@ -53,7 +53,7 @@
             <div class="form-group row">
                 <label for="date_range" class="col-sm-3 col-xs-12 required">Date range:</label>
             <!-- Date range -->
-                <div class="form-group">
+                <div class="form-group col-sm-9 col-xs-12 required">
                   
 
                   <div class="input-group">
@@ -62,7 +62,7 @@
                         <i class="far fa-calendar-alt"></i>
                       </span>
                     </div>
-                    <input type="text" class="form-control float-right" id="reservation" name="date_range">
+                    <input type="text" class="form-control float-right col-sm-9 col-xs-12 required" id="reservation" name="date_range">
                   </div>
                   <!-- /.input group -->
                 </div>
@@ -139,6 +139,8 @@
     })
 
     $('#reservation').daterangepicker({
+      startDate: '{{ $vote->start_at }}',
+      endDate: '{{ $vote->end_at }}',
       locale: {
         format: 'YYYY/MM/DD'
       }

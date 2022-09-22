@@ -5,8 +5,8 @@
  * @author      David<guochaowan2008@gmail.com>
  * @version     v1.1.0
  */
-
 namespace App\Http\Controllers\VoteAPI;
+date_default_timezone_set('America/Vancouver');
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -74,6 +74,7 @@ class VoteController extends Controller
         //$temp       = $temp- $hour*3600;
         //$minute     = floor($temp/60);
         //$second    = $temp-$minute*60;
+        echo date('H:i:s', strtotime("now"));
         return $day.'天'.$hour.'小时';
     }
 
