@@ -74,7 +74,7 @@ class VoteController extends Controller
         //$temp       = $temp- $hour*3600;
         //$minute     = floor($temp/60);
         //$second    = $temp-$minute*60;
-        echo date('H:i:s', strtotime("now"));
+        //echo date('H:i:s', strtotime("now"));
         return $day.'天'.$hour.'小时';
     }
 
