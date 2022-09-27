@@ -274,7 +274,9 @@ class VoteController extends Controller
     }
 
     public function limitAccessTest() {
-
+        $arr = [1,2,3,4,5];
+        $res = array_splice($arr, 2 , 3 ,[2,3,4]);
+        return $arr;
     }
 
 

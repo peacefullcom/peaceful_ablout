@@ -19,8 +19,11 @@ Route::group([
     Route::post('phoneVerification', 'App\Http\Controllers\VoteAPI\VoteController@phoneVerification');
     Route::post('phoneVerificationCheck', 'App\Http\Controllers\VoteAPI\VoteController@phoneVerificationCheck');
     Route::get('limitAccessTest', 'App\Http\Controllers\VoteAPI\VoteController@limitAccessTest');
-    
-    
+});
 
-    
+Route::group([
+    'prefix' => 'company'
+], function ($router) {
+    Route::get('artical', 'App\Http\Controllers\CompanyAPI\ArticalController@getArticalList');
+    Route::get('artical/{id}', 'App\Http\Controllers\CompanyAPI\ArticalController@getArticalById');
 });

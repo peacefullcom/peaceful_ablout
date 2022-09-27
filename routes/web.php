@@ -29,6 +29,11 @@ Route::group(['prefix' => 'backend'], function () {
         Route::any('/article-category/create','App\Http\Controllers\Backend\ArticleCategoryController@create');
         Route::any('/article-category/edit/{id}','App\Http\Controllers\Backend\ArticleCategoryController@edit');
         Route::any('/article-category/delete/{id}','App\Http\Controllers\Backend\ArticleCategoryController@delete');
+        //文章
+        Route::any('/article','App\Http\Controllers\Backend\ArticleController@index')->name('article');
+        Route::any('/article/create','App\Http\Controllers\Backend\ArticleController@create');
+        Route::any('/article/edit/{id}','App\Http\Controllers\Backend\ArticleController@edit');
+        Route::any('/article/delete/{id}','App\Http\Controllers\Backend\ArticleController@delete');
         //系统用户
         Route::any('/system-account','App\Http\Controllers\Backend\SystemAccountController@index')->name('system-account');
         Route::any('/system-account/create','App\Http\Controllers\Backend\SystemAccountController@create');
@@ -46,5 +51,7 @@ Route::group(['prefix' => 'backend'], function () {
         Route::any('/vote-player/delete/{id}','App\Http\Controllers\Backend\VotePlayerController@delete');
         //投票日志
         Route::any('/vote-log/{id}','App\Http\Controllers\Backend\VoteLogController@index')->name('vote-log');
+        //图片上传
+        Route::any('/image-upload', 'App\Http\Controllers\Backend\UploadImgController@upload')->name('image-upload');
     });
 });
