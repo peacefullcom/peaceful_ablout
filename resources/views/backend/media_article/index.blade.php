@@ -6,7 +6,7 @@
       <!-- Default box -->
       <div class="card">
         <div class="card-header">
-          <a class="btn btn-info" href="/backend/article/create">
+          <a class="btn btn-info" href="/backend/media-article/create">
                 Create
           </a>
         </div>
@@ -56,12 +56,12 @@
                           @endif
                       </td>
                       <td class="project-actions text-right">
-                          <a class="btn btn-info btn-sm" href="/backend/article/edit/{{ $article->id }}">
+                          <a class="btn btn-info btn-sm" href="/backend/media-article/edit/{{ $article->id }}">
                               <i class="fas fa-pencil-alt">
                               </i>
                               Edit
                           </a>
-                          <a class="btn btn-danger btn-sm" href="javascript:if(confirm('确定要删除吗？'))location='/backend/article/delete/{{ $article->id }}'">
+                          <a class="btn btn-danger btn-sm" href="javascript:if(confirm('确定要删除吗？'))location='/backend/media-article/delete/{{ $article->id }}'">
                               <i class="fas fa-trash">
                               </i>
                               Delete

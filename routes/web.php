@@ -29,11 +29,34 @@ Route::group(['prefix' => 'backend'], function () {
         Route::any('/article-category/create','App\Http\Controllers\Backend\ArticleCategoryController@create');
         Route::any('/article-category/edit/{id}','App\Http\Controllers\Backend\ArticleCategoryController@edit');
         Route::any('/article-category/delete/{id}','App\Http\Controllers\Backend\ArticleCategoryController@delete');
+
+        //传媒文章分类
+        Route::any('/media-article-category','App\Http\Controllers\Backend\MediaArticleCategoryController@index')->name('article-category');
+        Route::any('/media-article-category/create','App\Http\Controllers\Backend\MediaArticleCategoryController@create');
+        Route::any('/media-article-category/edit/{id}','App\Http\Controllers\Backend\MediaArticleCategoryController@edit');
+        Route::any('/media-article-category/delete/{id}','App\Http\Controllers\Backend\MediaArticleCategoryController@delete');
+
         //文章
         Route::any('/article','App\Http\Controllers\Backend\ArticleController@index')->name('article');
         Route::any('/article/create','App\Http\Controllers\Backend\ArticleController@create');
         Route::any('/article/edit/{id}','App\Http\Controllers\Backend\ArticleController@edit');
         Route::any('/article/delete/{id}','App\Http\Controllers\Backend\ArticleController@delete');
+
+        //传媒文章
+        Route::any('/media-article','App\Http\Controllers\Backend\MediaArticleController@index')->name('article');
+        Route::any('/media-article/create','App\Http\Controllers\Backend\MediaArticleController@create');
+        Route::any('/media-article/edit/{id}','App\Http\Controllers\Backend\MediaArticleController@edit');
+        Route::any('/media-article/delete/{id}','App\Http\Controllers\Backend\MediaArticleController@delete');
+
+        //传媒配置
+        Route::any('/media-set-description','App\Http\Controllers\Backend\MediaSetController@descriptionSet');
+        Route::any('/media-set-headinfo','App\Http\Controllers\Backend\MediaSetController@headInfoSet');
+        Route::any('/media-set-contact','App\Http\Controllers\Backend\MediaSetController@contactSet');
+        Route::any('/media-set-picture','App\Http\Controllers\Backend\MediaSetController@pictureSet');
+        //传媒作者
+        Route::any('/media-author','App\Http\Controllers\Backend\MediaAuthorController@index')->name('author');
+        Route::any('/media-author/create','App\Http\Controllers\Backend\MediaAuthorController@create');
+        Route::any('/media-author/edit/{id}','App\Http\Controllers\Backend\MediaAuthorController@edit');
         //系统用户
         Route::any('/system-account','App\Http\Controllers\Backend\SystemAccountController@index')->name('system-account');
         Route::any('/system-account/create','App\Http\Controllers\Backend\SystemAccountController@create');

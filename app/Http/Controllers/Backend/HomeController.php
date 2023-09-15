@@ -43,7 +43,7 @@ class HomeController extends Controller
     public function logout(Request $request){
         Session::flush();
         Auth::guard('admin')->logout();
-        return Redirect::to("/backend");
+        return Redirect::to("/backend/login");
     }
 
     /**

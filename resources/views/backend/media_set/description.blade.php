@@ -9,8 +9,9 @@
             <div class="card">
               <div class="card-header p-2">
                 <ul class="nav nav-pills">
-                  <li class="nav-item">Create</li>
-                  
+                  <li class="nav-item mr-2">Description</li>
+                  <li class="nav-item mr-2"><a href="/backend/media-set-headinfo">HeadInfo</a></li>
+                  <li class="nav-item mr-2"><a href="/backend/media-set-contact">Contact</a></li>
                 </ul>
               </div><!-- /.card-header -->
               <div class="card-body">
@@ -19,45 +20,20 @@
 
 
 <!-- form start -->
-        <form method="POST" action="/backend/article/create" accept-charset="UTF-8" class="form-horizontal col-sm-10" autocomplete="off" id="form1" enctype="multipart/form-data">
+        <form method="POST" action="" accept-charset="UTF-8" class="form-horizontal col-sm-10" autocomplete="off" id="form1" >
         @csrf
 
-         <div class="col-sm-8 offset-sm-2 col-xs-12">        
+         <div class="col-sm-8 offset-sm-2 col-xs-12"> 
             <div class="form-group row">
               <label for="title" class="col-sm-3 col-xs-12 required">title</label>
-              <input class="col-sm-9 col-xs-12 form-control" id="title" name="title" type="text">
+              <input class="col-sm-9 col-xs-12 form-control" id="title" name="title" type="text" value="{{ $data['title'] }}">
             </div>
-            @if ($category)
-            <div class="form-group row">
-              <label for="cid" class="col-sm-3 col-xs-12 required">category</label>
-              <select class="col-sm-9 col-xs-12 form-control" id="cid" name="cid">
-                @foreach ($category as $k => $v)
-                  <option value="{{ $k }}">{{ $v }}</option>
-                @endforeach
-              </select>
-            </div>
-            @endif
+
             <div class="form-group row">
               <label for="description" class="col-sm-3 col-xs-12 required">description</label>
-              <textarea class="col-sm-9 col-xs-12 form-control" id="description" name="description" rows="4" cols="100"></textarea>
+              <input class="col-sm-9 col-xs-12 form-control" id="description" name="description" type="text" value="{{ $data['description'] }}">
             </div>
-            <div class="form-group row">
-              <label for="image" class="col-sm-3 col-xs-12 required">image</label>
-              <input class="col-sm-9 col-xs-12" id="image" name="image" type="file">
-            </div>
-            <div class="form-group row">
-              <label for="content" class="col-sm-3 col-xs-12 required">content</label>
-              <textarea class="ckeditor form-control" id="content" name="content" rows="4" cols="100"></textarea>
-            </div>
-            <div class="form-group row">
-              <label for="is_publish" class="col-sm-3 col-xs-12 required">publish</label>
-              <input type="checkbox" name="is_publish" checked data-bootstrap-switch data-off-color="danger" data-on-color="success">
-            </div>
-            <div class="form-group row">
-              <label for="sort" class="col-sm-3 col-xs-12 required">sort</label>
-              <input class="col-sm-3 col-xs-3  form-control" id="sort" name="sort" type="text">
-            </div>
-            
+
             <div class="form-group row">
               <div class="col-sm-12 text-center">
                 <input name="submit" class="btn btn-info pull-center text-center" id="sbmtbtn" type="submit" value="Submit">
@@ -126,12 +102,6 @@
       $(this).bootstrapSwitch('state', $(this).prop('checked'));
     })
   })
-</script>
-<script src="/ckeditor/ckeditor.js"></script>
-<script type="text/javascript">
-  CKEDITOR.replace('content', {
-        filebrowserUploadUrl: "{{route('image-upload', ['_token' => csrf_token() ])}}",
-        filebrowserUploadMethod: 'form'
-  });
+
 </script>
 @stop

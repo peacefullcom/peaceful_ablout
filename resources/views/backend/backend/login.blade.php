@@ -1,13 +1,13 @@
 @extends ('backend.layouts.default')
 @section ('content')
-<section class="pt-4">
+<section style="width:100%; margin-top: 180px;">
      
-    <div class="offset-sm-2 offset-md-3 offset-xl-4">
+    <div class="mx-auto">
         <form  method="POST" action="/backend/login" onsubmit="return validateForm();" accept-charset="UTF-8"  autocomplete="on">
         {{ csrf_field() }} 
         <div class="modal-body" id='registerBody'>
            <div class="container">
-              <div class="col-sm-8 col-md-6 col-xl-4">
+              <div class="px-5 py-5 mx-auto" style="max-width: 800px; background-color:rgba(0,0,0,0.5);">
                 <!-- 
                 <div class="form-group row">
                    <div class="col-sm-2"><i class="fa fa-user-circle"></i></div>
@@ -15,20 +15,25 @@
                 </div>
                 -->
                 <div class="form-group row my-2">
-                   <div class="col-sm-1 text-right"><i class="fa fa-envelope"></i></div>
-                   <div class="col-sm-11"><input type="email" id="email" name="email" class="form-control validate"  placeholder="Your Email"></div>
+                   <h3 class="text-center text-light">和平后台管理系统</h3>
                 </div>
-                <div class="form-group row my-2">
-                   <div class="col-sm-1  text-right"><i class="fa fa-lock fa-lg"></i></div>
-                   <div class="col-sm-11"><input type="password" id="password" name="password" class="form-control" placeholder="Password"></div>
+                <div class="form-group row my-4">
+                   <div class="col-sm-1 text-right text-light"><i class="fa fa-envelope"></i></div>
+                   <div class="col-sm-11"><input type="email" id="email" name="email" class="form-control validate"  placeholder="Your Email" style="background-color:transparent; border:1"></div>
+                </div>
+                <div class="form-group row my-4">
+                   <div class="col-sm-1  text-right text-light"><i class="fa fa-lock fa-lg"></i></div>
+                   <div class="col-sm-11"><input type="password" id="password" name="password" class="form-control" placeholder="Password" style="background-color:transparent; border:1"></div>
                 </div>
                    
                 <div class="form-group row">
-                   <div class="col-sm-12 text-center"><button class="btn btn-info" name="submit" value="login">Login</button></div>
+                   <div class="col-sm-12 text-center"><button class="btn bg-light text-dark" name="submit" value="login">LOGIN</button></div>
                 </div>
+                <!--
                 <div class="col-sm-12 mt-2">
                     <div class="text-center"><a href="/backend/lost-password" class="btn btn-ligh">Lost Password</a></div>
-                </div>  
+                </div>
+                -->
                 <div class="col-sm-12">
                    @if ($errors->any())
                    <div class="alert alert-danger text-center">

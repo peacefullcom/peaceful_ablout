@@ -19,7 +19,7 @@
 
 
 <!-- form start -->
-        <form method="POST" action="" accept-charset="UTF-8" class="form-horizontal col-sm-10" autocomplete="off" id="form1">
+        <form method="POST" action="" accept-charset="UTF-8" class="form-horizontal col-sm-10" autocomplete="off" id="form1" enctype="multipart/form-data">
         @csrf
 
          <div class="col-sm-8 offset-sm-2 col-xs-12"> 
@@ -27,9 +27,24 @@
               <label for="title" class="col-sm-3 col-xs-12 required">title</label>
               <input class="col-sm-9 col-xs-12 form-control" id="title" name="title" type="text" value="{{ $article->title }}">
             </div>
+            @if ($category)
             <div class="form-group row">
-              <label for="cid" class="col-sm-3 col-xs-12 required">cid</label>
-              <input class="col-sm-9 col-xs-12  form-control" id="cid" name="cid" type="text" value="{{ $article->cid }}">
+              <label for="cid" class="col-sm-3 col-xs-12 required">category</label>
+              <select class="col-sm-9 col-xs-12 form-control" id="cid" name="cid">
+                @foreach ($category as $k => $v)
+                  <option value="{{ $k }}" @if($article->cid == $k) selected @endif >{{ $v }}</option>
+                @endforeach
+              </select>
+            </div>
+            @endif
+            <div class="form-group row">
+              <label for="description" class="col-sm-3 col-xs-12 required">description</label>
+              <textarea class="col-sm-9 col-xs-12 form-control" id="description" name="description" rows="4" cols="50">{{ $article->description }}</textarea>
+            </div>
+            <div class="form-group row">
+              <label for="image" class="col-sm-3 col-xs-12 required">image</label>
+              <img class="img-fluid" src="{{ $article->img }}" alt="Photo">
+              <input class="col-sm-9 col-xs-12" id="image" name="image" type="file">
             </div>
             <div class="form-group row">
               <label for="content" class="col-sm-3 col-xs-12 required">content</label>

@@ -1,6 +1,6 @@
 <?php
 /**
- * ClassName: Article
+ * ClassName: MediaArticle
  * 文章模型
  * @author      David<guochaowan2008@gmail.com>
  * @version     v1.1.0
@@ -12,17 +12,18 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
 
-class Article extends Model
+class MediaArticle extends Model
 {
     /**
      * 模型表article
      * @var string
      */
-    protected $table = "article";
+    protected $table = "media_article";
 
     protected $fillable = array(
         'title',
         'cid',
+        'author_id', 
         'description',
         'content',
         'img',
@@ -37,7 +38,15 @@ class Article extends Model
      * @return $this
      */
     public function category(){
-        return $this->belongsTo(ArticleCategory::class, 'cid');
+        return $this->belongsTo(MediaArticleCategory::class, 'cid');
     }
     
+    /**
+     * 关联文章作者模型
+     * @access public
+     * @return $this
+     */
+    public function author(){
+        return $this->belongsTo(MediaAuthor::class, 'id');
+    }
 }

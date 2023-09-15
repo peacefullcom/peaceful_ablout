@@ -19,7 +19,7 @@
 
 
 <!-- form start -->
-        <form method="POST" action="/backend/article/create" accept-charset="UTF-8" class="form-horizontal col-sm-10" autocomplete="off" id="form1" enctype="multipart/form-data">
+        <form method="POST" action="/backend/media-article/create" accept-charset="UTF-8" class="form-horizontal col-sm-10" autocomplete="off" id="form1" enctype="multipart/form-data">
         @csrf
 
          <div class="col-sm-8 offset-sm-2 col-xs-12">        
@@ -32,6 +32,17 @@
               <label for="cid" class="col-sm-3 col-xs-12 required">category</label>
               <select class="col-sm-9 col-xs-12 form-control" id="cid" name="cid">
                 @foreach ($category as $k => $v)
+                  <option value="{{ $k }}">{{ $v }}</option>
+                @endforeach
+              </select>
+            </div>
+            @endif
+
+            @if ($authors)
+            <div class="form-group row">
+              <label for="author_id" class="col-sm-3 col-xs-12 required">author</label>
+              <select class="col-sm-9 col-xs-12 form-control" id="author_id" name="author_id">
+                @foreach ($authors as $k => $v)
                   <option value="{{ $k }}">{{ $v }}</option>
                 @endforeach
               </select>

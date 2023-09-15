@@ -1,6 +1,6 @@
 <?php
 /**
- * ClassName: ArticleCategory
+ * ClassName: MediaArticleCategory
  * 文章分类模型
  * @author      David<guochaowan2008@gmail.com>
  * @version     v1.1.0
@@ -12,13 +12,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
 
-class ArticleCategory extends Model
+class MediaArticleCategory extends Model
 {
     /**
      * 模型表article_category
      * @var string
      */
-    protected $table = "article_category";
+    protected $table = "media_article_category";
 
     protected $fillable = array(
         'name',

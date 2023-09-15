@@ -19,43 +19,57 @@
 
 
 <!-- form start -->
-        <form method="POST" action="/backend/article/create" accept-charset="UTF-8" class="form-horizontal col-sm-10" autocomplete="off" id="form1" enctype="multipart/form-data">
+        <form method="POST" action="" accept-charset="UTF-8" class="form-horizontal col-sm-10" autocomplete="off" id="form1" enctype="multipart/form-data">
         @csrf
 
-         <div class="col-sm-8 offset-sm-2 col-xs-12">        
+         <div class="col-sm-8 offset-sm-2 col-xs-12"> 
             <div class="form-group row">
               <label for="title" class="col-sm-3 col-xs-12 required">title</label>
-              <input class="col-sm-9 col-xs-12 form-control" id="title" name="title" type="text">
+              <input class="col-sm-9 col-xs-12 form-control" id="title" name="title" type="text" value="{{ $article->title }}">
             </div>
             @if ($category)
             <div class="form-group row">
               <label for="cid" class="col-sm-3 col-xs-12 required">category</label>
               <select class="col-sm-9 col-xs-12 form-control" id="cid" name="cid">
                 @foreach ($category as $k => $v)
-                  <option value="{{ $k }}">{{ $v }}</option>
+                  <option value="{{ $k }}" @if($article->cid == $k) selected @endif >{{ $v }}</option>
+                @endforeach
+              </select>
+            </div>
+            @endif
+
+            @if ($authors)
+            <div class="form-group row">
+              <label for="author_id" class="col-sm-3 col-xs-12 required">author</label>
+              <select class="col-sm-9 col-xs-12 form-control" id="author_id" name="author_id">
+                @foreach ($authors as $k => $v)
+                  <option value="{{ $k }}" @if($article->author_id == $k) selected @endif >{{ $v }}</option>
                 @endforeach
               </select>
             </div>
             @endif
             <div class="form-group row">
               <label for="description" class="col-sm-3 col-xs-12 required">description</label>
-              <textarea class="col-sm-9 col-xs-12 form-control" id="description" name="description" rows="4" cols="100"></textarea>
+              <textarea class="col-sm-9 col-xs-12 form-control" id="description" name="description" rows="4" cols="50">{{ $article->description }}</textarea>
             </div>
             <div class="form-group row">
               <label for="image" class="col-sm-3 col-xs-12 required">image</label>
+              <img class="img-fluid" src="{{ $article->img }}" alt="Photo">
               <input class="col-sm-9 col-xs-12" id="image" name="image" type="file">
             </div>
             <div class="form-group row">
               <label for="content" class="col-sm-3 col-xs-12 required">content</label>
-              <textarea class="ckeditor form-control" id="content" name="content" rows="4" cols="100"></textarea>
+              <textarea class="col-sm-9 col-xs-12 form-control" id="content" name="content" rows="4" cols="50">{{ $article->content }}</textarea>
             </div>
             <div class="form-group row">
               <label for="is_publish" class="col-sm-3 col-xs-12 required">publish</label>
-              <input type="checkbox" name="is_publish" checked data-bootstrap-switch data-off-color="danger" data-on-color="success">
+              <input type="checkbox" name="is_publish" data-bootstrap-switch data-off-color="danger" data-on-color="success" 
+              @if($article->is_publish == 1) checked @endif 
+              >
             </div>
             <div class="form-group row">
               <label for="sort" class="col-sm-3 col-xs-12 required">sort</label>
-              <input class="col-sm-3 col-xs-3  form-control" id="sort" name="sort" type="text">
+              <input class="col-sm-3 col-xs-3  form-control" id="sort" name="sort" type="text" value="{{ $article->sort }}">
             </div>
             
             <div class="form-group row">
@@ -126,6 +140,7 @@
       $(this).bootstrapSwitch('state', $(this).prop('checked'));
     })
   })
+
 </script>
 <script src="/ckeditor/ckeditor.js"></script>
 <script type="text/javascript">

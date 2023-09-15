@@ -1,6 +1,6 @@
 <?php
 /**
- * ClassName: ArticleController
+ * ClassName: MediaArticleController
  * 文章分类控制器
  * @author      David<guochaowan2008@gmail.com>
  * @version     v1.1.0
@@ -17,14 +17,15 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 
 use App\Models\Admin;
-use App\Models\Article;
-use App\Models\ArticleCategory;
+use App\Models\MediaArticle;
+use App\Models\MediaArticleCategory;
+use App\Models\MediaAuthor;
 
 use App\Library\ImageUpload;
 
-class ArticleController extends Controller
+class MediaArticleController extends Controller
 {  
-    private $prefixName = 'article';
+    private $prefixName = 'media_article';
 
     public function __construct()
     {  
@@ -38,11 +39,11 @@ class ArticleController extends Controller
      */
     public function index(Request $request)
     {
-        $articleModel = new Article();
+        $articleModel = new MediaArticle();
         $query = $articleModel->query();
         $query->where('is_delete', '=', 0);
         $articles = $query->orderBy('id', 'asc')->paginate(20);
-        return view('backend.article.index')->with('articles', $articles);
+        return view('backend.media_article.index')->with('articles', $articles);
     }
 
     /**
@@ -57,6 +58,7 @@ class ArticleController extends Controller
                 'title' => 'required|string|max:25',
                 'sort' => 'integer|max:99',
                 'cid' => 'integer|max:99',
+                'author_id' => 'integer|max:99',
                 'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
             if(!$validator) {
@@ -68,9 +70,10 @@ class ArticleController extends Controller
             if (!$fileName) {
                 return Redirect::back()->withErrors(['message' => 'Failed to upload an image.']);
             }
-            $id = Article::create([
+            $id = MediaArticle::create([
                 'title' => $request->get('title'),
                 'cid' => $request->get('cid'),
+                'author_id' => $request->get('author_id'),
                 'description' => $request->get('description'),
                 'img' => $fileName,
                 'content' => $request->get('content'),
@@ -83,9 +86,12 @@ class ArticleController extends Controller
                 return Redirect::back()->withErrors(['message' => 'Failed to created a new article .']);
             }
         }
-        $articleCategoryModel = new ArticleCategory();
+        $articleCategoryModel = new MediaArticleCategory();
         $category = $articleCategoryModel->getArticleCategorySelection();
-        return view('backend.article.create')->with('category', $category);
+
+        $mediaAuthorModel = new MediaAuthor();
+        $authors = $mediaAuthorModel->getMediaAuthorSelection();
+        return view('backend.media_article.create')->with('category', $category)->with('authors', $authors);
     }
 
     /**
@@ -95,7 +101,7 @@ class ArticleController extends Controller
      */
     public function edit(Request $request, ImageUpload $uploader, $id)
     {
-        $article = Article::find($id);
+        $article = MediaArticle::find($id);
         if(!$article) {
             return Redirect::back()->with('message', 'This article does not exist.');
         }
@@ -117,6 +123,7 @@ class ArticleController extends Controller
             }
             $article->title = $request->get('title');
             $article->cid = $request->get('cid');
+            $article->author_id = $request->get('author_id');
             $article->img = $request->image ? $fileName : $article->img;
             $article->description = $request->get('description');
             $article->content = $request->get('content');
@@ -127,9 +134,12 @@ class ArticleController extends Controller
            }   
            return Redirect::back()->with(['message' => 'Update article successfuly.']);
         }
-        $articleCategoryModel = new ArticleCategory();
+        $articleCategoryModel = new MediaArticleCategory();
         $category = $articleCategoryModel->getArticleCategorySelection();
-        return view('backend.article.edit',compact('article'))->with('category', $category);
+
+        $mediaAuthorModel = new MediaAuthor();
+        $authors = $mediaAuthorModel->getMediaAuthorSelection();
+        return view('backend.media_article.edit',compact('article'))->with('category', $category)->with('authors', $authors);
     }
 
     /**
@@ -139,7 +149,7 @@ class ArticleController extends Controller
      */
     public function delete(Request $request, $id)
     {
-        $article = Article::find($id);
+        $article = MediaArticle::find($id);
         if(!$article) {
             return Redirect::back()->with('message', 'This article does not exist.');
         }

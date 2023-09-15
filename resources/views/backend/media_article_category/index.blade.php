@@ -6,7 +6,7 @@
       <!-- Default box -->
       <div class="card">
         <div class="card-header">
-          <a class="btn btn-info" href="/backend/article/create">
+          <a class="btn btn-info" href="/backend/media-article-category/create">
                 Create
           </a>
         </div>
@@ -18,10 +18,10 @@
                           ID
                       </th>
                       <th style="width: 20%">
-                          Title
+                          Category Name
                       </th>
                       <th style="width: 30%">
-                          Category Name
+                          Category Name EN
                       </th>
                       <th>
                           Sort Order
@@ -34,34 +34,34 @@
                   </tr>
               </thead>
               <tbody>
-                @foreach($articles as $article)
+                @foreach($articleCategories as $articleCategory)
                   <tr>
                       <td>
-                          {{ $article->id }}
+                          {{ $articleCategory->id }}
                       </td>
                       <td>
-                          {{ $article->title }}
+                          {{ $articleCategory->name }}
                       </td>
                       <td>
-                          {{ $article->category->name }}
+                          {{ $articleCategory->name_en }}
                       </td>
                       <td>
-                          {{ $article->sort }}
+                          {{ $articleCategory->sort }}
                       </td>
                       <td class="project-state">
-                          @if($article->is_publish)
+                          @if($articleCategory->is_publish)
                             <span class="badge badge-success">ON</span>
                           @else
                             <span class="badge badge-warning">OFF</span>
                           @endif
                       </td>
                       <td class="project-actions text-right">
-                          <a class="btn btn-info btn-sm" href="/backend/article/edit/{{ $article->id }}">
+                          <a class="btn btn-info btn-sm" href="/backend/media-article-category/edit/{{ $articleCategory->id }}">
                               <i class="fas fa-pencil-alt">
                               </i>
                               Edit
                           </a>
-                          <a class="btn btn-danger btn-sm" href="javascript:if(confirm('确定要删除吗？'))location='/backend/article/delete/{{ $article->id }}'">
+                          <a class="btn btn-danger btn-sm" href="javascript:if(confirm('确定要删除吗？'))location='/backend/media-article-category/delete/{{ $articleCategory->id }}'">
                               <i class="fas fa-trash">
                               </i>
                               Delete
@@ -76,7 +76,7 @@
         <!-- /.card-body -->
         <div class="card-footer">   
             <div class="text-center">
-                  {{ $articles->links() }}
+                  {{ $articleCategories->links() }}
             </div>
         </div>
 

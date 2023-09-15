@@ -21,42 +21,55 @@
     
    
     @yield('headcontent')
+
+    <style>
+        html {
+            height: 100%;
+        }
+
+        body {
+            min-height:100vh; 
+            overflow-y: scroll; 
+            background-image: url(/img/login_bg.jpg);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            background-size: cover;
+        }
+    </style>
       
     </head>
 
-    <body id="page-top" style="min-height:100vh; overflow-y: scroll;">
+    <body id="page-top">
 
-        @include('backend.layouts.navbar')
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-md mb-5">
+         <div class="container">
+            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav ms-auto mt-3">
+              <li class="nav-item">
+                @if(Auth::guard('admin')->user())
+                <a class="nav-link px-3 border border-white text-light" href="/backend/home">BACKEND</a>
+                @else
+                <a class="nav-link px-3 border border-white text-light opacity-50" href="/backend/login">SIGN IN</a>
+                @endif
+              </li>
+            </ul>
+          </div>
+         </div>
+        </nav>
         
         @yield('content')
    
-        <section class="bg-dark text-white" id="footer" >
+        <section class="text-white" id="footer" >
 
-        <div class="container p-3 mt-0">
-        <div class="row">
-        <div class="col-sm-4 mx-auto text-center pt-1">
-            <!--<img src="/img/logo-eng.jpg" style="height:80px;width:auto"> -->
-        </div>
-        
-        <div class="col-sm-4 mx-auto text-center">
-            
-            <div class="col-sm-12 row pb-4">
-              <div class="col-sm-4">About Us</div>
-              <div class="col-sm-4">Privacy Policy</div>
-              <div class="col-sm-4">Term of Use</div>
+        <div class="container p-3 mb-2">
+            <div class="col-sm-12 mx-auto text-center">
+                <div class="col-sm-12">©2022 PeacefulMall. All Rights Reserved. | #120 - 1200 W. 73rd Ave, Vancouver, BC V6P 6G5 | info@peacefulmall.com</div>
             </div>
-             
-            <div class="col-sm-12"> #120 - 1200 W. 73rd Ave, Vancouver, BC V6P 6G5</div>
-            <div class="col-sm-12">info@peacefulmall.com</div>
-             
-        </div>
-        
-        <div class="col-sm-4 mx-auto text-center">
-            <div class="pb-2"><a href="https://play.google.com/store/apps/details?id=com.restaurantdem.peaceful_driver"><img src="/img/androidButtonsWhite.png" style="height:50px;width:auto"></a></div>
-            <div><a href="https://apps.apple.com/ca/app/peaceful-driver/id1605258358"><img src="/img/appleButtonsWhite.png" style="height:50px;width:auto"></a></div>
-        </div>
-        
-        </div>
         </div>
 
         </section>

@@ -6,7 +6,7 @@
       <!-- Default box -->
       <div class="card">
         <div class="card-header">
-          <a class="btn btn-info" href="/backend/article/create">
+          <a class="btn btn-info" href="/backend/media-author/create">
                 Create
           </a>
         </div>
@@ -14,57 +14,43 @@
           <table class="table table-striped projects">
               <thead>
                   <tr>
-                      <th style="width: 1%">
+                      <th style="width: 5%">
                           ID
                       </th>
-                      <th style="width: 20%">
+                      <th style="width: 15%">
+                          Name
+                      </th>
+                      <th style="width: 30%">
                           Title
                       </th>
                       <th style="width: 30%">
-                          Category Name
-                      </th>
-                      <th>
-                          Sort Order
-                      </th>
-                      <th style="width: 8%" class="text-center">
-                          Status
+                          Description
                       </th>
                       <th style="width: 20%">
                       </th>
                   </tr>
               </thead>
               <tbody>
-                @foreach($articles as $article)
+                @foreach($authors as $author)
                   <tr>
                       <td>
-                          {{ $article->id }}
+                          {{ $author->id }}
                       </td>
                       <td>
-                          {{ $article->title }}
+                          {{ $author->name }}
                       </td>
                       <td>
-                          {{ $article->category->name }}
+                          {{ $author->title }}
                       </td>
                       <td>
-                          {{ $article->sort }}
+                          {{ $author->description }}
                       </td>
-                      <td class="project-state">
-                          @if($article->is_publish)
-                            <span class="badge badge-success">ON</span>
-                          @else
-                            <span class="badge badge-warning">OFF</span>
-                          @endif
-                      </td>
+                      
                       <td class="project-actions text-right">
-                          <a class="btn btn-info btn-sm" href="/backend/article/edit/{{ $article->id }}">
+                          <a class="btn btn-info btn-sm" href="/backend/media-author/edit/{{ $author->id }}">
                               <i class="fas fa-pencil-alt">
                               </i>
                               Edit
-                          </a>
-                          <a class="btn btn-danger btn-sm" href="javascript:if(confirm('确定要删除吗？'))location='/backend/article/delete/{{ $article->id }}'">
-                              <i class="fas fa-trash">
-                              </i>
-                              Delete
                           </a>
                       </td>
                   </tr>
@@ -76,7 +62,7 @@
         <!-- /.card-body -->
         <div class="card-footer">   
             <div class="text-center">
-                  {{ $articles->links() }}
+                  {{ $authors->links() }}
             </div>
         </div>
 

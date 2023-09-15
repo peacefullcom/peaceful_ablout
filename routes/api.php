@@ -24,6 +24,21 @@ Route::group([
 Route::group([
     'prefix' => 'company'
 ], function ($router) {
-    Route::get('artical', 'App\Http\Controllers\CompanyAPI\ArticalController@getArticalList');
-    Route::get('artical/{id}', 'App\Http\Controllers\CompanyAPI\ArticalController@getArticalById');
+    Route::get('articleCategory', 'App\Http\Controllers\CompanyAPI\ArticleCategoryController@getArticleCategoryList');
+    Route::get('article', 'App\Http\Controllers\CompanyAPI\ArticleController@getArticleList');
+    Route::get('article/cid/{cid}', 'App\Http\Controllers\CompanyAPI\ArticleController@getArticleListByCid');
+    Route::get('article/{id}', 'App\Http\Controllers\CompanyAPI\ArticleController@getArticleById');
+    Route::get('test', 'App\Http\Controllers\CompanyAPI\ArticleController@getTest');
+});
+
+
+Route::group([
+    'prefix' => 'media'
+], function ($router) {
+    Route::get('articleCategory', 'App\Http\Controllers\MediaAPI\ArticleCategoryController@getArticleCategoryList');
+    Route::get('article/test', 'App\Http\Controllers\MediaAPI\ArticleController@getArticleTest');
+    Route::get('article', 'App\Http\Controllers\MediaAPI\ArticleController@getArticleList');
+    Route::get('article/cid/{cid}', 'App\Http\Controllers\MediaAPI\ArticleController@getArticleListByCid');
+    Route::get('article/{id}', 'App\Http\Controllers\MediaAPI\ArticleController@getArticleById');
+
 });

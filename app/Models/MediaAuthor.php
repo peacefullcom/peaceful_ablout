@@ -1,7 +1,7 @@
 <?php
 /**
- * ClassName: Article
- * 文章模型
+ * ClassName: MediaAuthor
+ * 作者模型
  * @author      David<guochaowan2008@gmail.com>
  * @version     v1.1.0
  */
@@ -12,32 +12,27 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
 
-class Article extends Model
+class MediaAuthor extends Model
 {
     /**
      * 模型表article
      * @var string
      */
-    protected $table = "article";
+    protected $table = "media_author";
 
     protected $fillable = array(
+        'name',
         'title',
-        'cid',
         'description',
-        'content',
-        'img',
-        'is_publish',
-        'is_delete',
-        'sort'
     );
 
-    /**
-     * 关联文章分类模型
-     * @access public
-     * @return $this
-     */
-    public function category(){
-        return $this->belongsTo(ArticleCategory::class, 'cid');
+    public function getMediaAuthorSelection() {
+        $data = self::select(['id', 'name'])->get()->toArray();
+        $res = [];
+        foreach ($data as $author) {
+            $res[$author['id']] = $author['name'];
+        }
+        return $res;
     }
     
 }
