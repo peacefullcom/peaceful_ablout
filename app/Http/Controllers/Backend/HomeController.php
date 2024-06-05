@@ -50,6 +50,7 @@ class HomeController extends Controller
      * 修改管理员个人信息
      * @param Request $request
      * @return mixed
+     * 
      */
     public function changeProfile(Request $request)
     {
@@ -82,6 +83,7 @@ class HomeController extends Controller
      * 修改管理员密码
      * @param Request $request
      * @return mixed
+     * 
      */
     public function changePassword(Request $request)
     {

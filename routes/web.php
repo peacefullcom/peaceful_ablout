@@ -36,6 +36,9 @@ Route::group(['prefix' => 'backend'], function () {
         Route::any('/media-article-category/edit/{id}','App\Http\Controllers\Backend\MediaArticleCategoryController@edit');
         Route::any('/media-article-category/delete/{id}','App\Http\Controllers\Backend\MediaArticleCategoryController@delete');
 
+        //网络爬虫
+        Route::any('/crawler', 'App\Http\Controllers\Backend\WebCrawlerController@index')->name('crawler');
+
         //文章
         Route::any('/article','App\Http\Controllers\Backend\ArticleController@index')->name('article');
         Route::any('/article/create','App\Http\Controllers\Backend\ArticleController@create');

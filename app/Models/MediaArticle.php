@@ -16,7 +16,7 @@ class MediaArticle extends Model
 {
     /**
      * 模型表article
-     * @var string
+     * @var string 
      */
     protected $table = "media_article";
 

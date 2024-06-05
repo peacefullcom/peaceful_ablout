@@ -45,7 +45,6 @@ class MediaArticleController extends Controller
         $articles = $query->orderBy('id', 'asc')->paginate(20);
         return view('backend.media_article.index')->with('articles', $articles);
     }
-
     /**
      * 创建文章
      * @param Request $request
@@ -94,10 +93,12 @@ class MediaArticleController extends Controller
         return view('backend.media_article.create')->with('category', $category)->with('authors', $authors);
     }
 
+
     /**
      * 修改文章
      * @param Request $request
      * @return mixed
+     * 
      */
     public function edit(Request $request, ImageUpload $uploader, $id)
     {
@@ -115,7 +116,7 @@ class MediaArticleController extends Controller
             }
             if ($request->image) {
                 //$fileName = $this->prefixName.'_'.time().'.'.$request->image->extension();
-                //$request->image->move(public_path('images'), $fileName);
+                //$request->image->move(public_path('images'), $fileName); 
                 $fileName = $uploader->save($request->image, $this->prefixName, 'n');
                 if (!$fileName) {
                     return Redirect::back()->withErrors(['message' => 'Failed to upload an image.']);
@@ -136,7 +137,6 @@ class MediaArticleController extends Controller
         }
         $articleCategoryModel = new MediaArticleCategory();
         $category = $articleCategoryModel->getArticleCategorySelection();
-
         $mediaAuthorModel = new MediaAuthor();
         $authors = $mediaAuthorModel->getMediaAuthorSelection();
         return view('backend.media_article.edit',compact('article'))->with('category', $category)->with('authors', $authors);
@@ -146,6 +146,7 @@ class MediaArticleController extends Controller
      * 删除文章
      * @param Request $request
      * @return mixed
+     * 
      */
     public function delete(Request $request, $id)
     {
